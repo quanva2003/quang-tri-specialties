@@ -2,6 +2,8 @@ import { Bilingual } from "./types";
 
 export const copy = {
   nav: {
+    home: { vi: "Trang chính", en: "Home" } as Bilingual,
+    featured: { vi: "Món đặc trưng", en: "Featured" } as Bilingual,
     dishes: { vi: "Món ăn", en: "Dishes" } as Bilingual,
     gifts: { vi: "Đặc sản", en: "Gifts" } as Bilingual,
     map: { vi: "Bản đồ làng nghề", en: "Craft map" } as Bilingual,

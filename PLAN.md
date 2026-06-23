@@ -238,13 +238,67 @@ Output: write this variant at app/preview/c/page.tsx, preview at localhost:3000/
 
 → `npm run dev`, mở 3 tab, so 3 variant. Reply chọn 1 làm blueprint (vd: "go with Variant A, but pull the immersive hero from B"). Variant đã chọn = reference cho Phase 3 (ảnh) và Phase 4 (skeleton). **`app/preview/` sẽ bị xóa ở Phase 4** — đừng để nó lọt lên Vercel.
 
+### ✅ DECISION — blueprint = **Variant D (confirmed)**
+
+Sau khi xem A/B/C: chọn **B làm base** nhưng phát sinh thêm **Variant D** = base B + lấy Craft Map của C + thêm **header nav** (menu link smooth-scroll tới từng section). Đã chạy và xem `localhost:3000/preview/d`, ưng → **D là blueprint cuối** cho Phase 4.
+
+D giữ 3 thứ đặc trưng (Phase 4 phải bê nguyên):
+
+1. **Base B** — ảnh lớn cảm xúc, hero immersive, photography-led, type/spacing của B.
+2. **Craft Map của C** — kiểu magazine-grid của block map (lấy treatment, không lấy cả trang).
+3. **Header nav (mới ở D)** — menu link tới Hero/Featured/Dishes/Gifts/Craft Map, smooth-scroll tới anchor ổn định; lang toggle dời lên header; `scroll-margin-top` để heading không bị header che; mobile collapse gọn (hamburger).
+
+<details><summary>Prompt đã dùng — tạo Variant D</summary>
+
+```
+Read .agents/skills/design-taste-frontend/SKILL.md and follow it. Produce a new combined
+layout variant for this single-page site, written to app/preview/d/page.tsx (preview at
+localhost:3000/preview/d). This is still a throwaway preview route.
+
+Start from the two existing previews — read both first and reuse their code:
+- app/preview/b/page.tsx  → BASE. Keep B's overall direction: large emotive imagery,
+  immersive hero, photography-led storytelling, and its type/spacing treatment.
+- app/preview/c/page.tsx  → take ONLY its Craft Map section treatment (the structured,
+  magazine-grid styling of the map block) and drop it into D in place of B's map section.
+
+Project context (unchanged): bilingual (VI/EN) single-page landing celebrating the regional
+food specialties of Quảng Trị, central Vietnam. Mood: central-Vietnam sun-and-wind, nostalgic,
+rustic yet expensive-looking, editorial. Palette: earth tones (dried-banana-leaf brown, sand
+yellow), muted moss green, restrained chili-red accent — no neon/purple SaaS gradients. Fonts
+via next/font with the vietnamese subset (Playfair Display headings + Be Vietnam Pro body) are
+already set in the root layout — reuse them; diacritics must render correctly. Content is
+data-driven from /content (dishes, copy); language via useLang (?lang=, default vi). EN text is
+usually longer than VI — nothing may overflow or break.
+
+NEW requirement for D — a header nav:
+- Add a header with menu links to each main section: Hero/Home, Featured dish, Dishes, Gifts,
+  Craft Map. Clicking a link smooth-scrolls to that section.
+- Give each section a stable id (e.g. id="dishes") and wire links to those anchors; use native
+  smooth scrolling (scroll-behavior or scrollIntoView).
+- Menu labels are bilingual via copy/useLang (add the labels to copy if missing).
+- Move the language toggle into this header (it currently lives in B's hero).
+- The header must fit the editorial/nostalgic mood — NOT a heavy generic SaaS sticky navbar.
+  If it's sticky/fixed, give scrolled-to sections scroll-margin-top so their headings aren't
+  hidden under the header.
+- Responsive: on mobile, collapse the menu into a tasteful compact menu (e.g. hamburger), still
+  scroll-linking to the same anchors. No horizontal overflow.
+
+The Craft Map content is still just a styled placeholder at this stage (real SVG comes later) —
+only its layout/treatment matters here. Keep D isolated; I'll refactor the chosen direction into
+real data-driven components afterward. Briefly explain what you took from B vs C and how the
+header anchors are wired.
+```
+
+</details>
+
 **QA gate:**
 
 ```
 /qa — scope: sanity-check the generated directions against the brief (mood, palette, bilingual
 tolerance, all 6 sections present, Vietnamese-capable fonts render diacritics correctly on the
-preview routes). Flag any variant that drifts into generic/templated layout or ignores the
-editorial/nostalgic mood. Design gate — no code review.
+preview routes). Confirm Variant D combines B's base + C's craft map + a working header nav
+(anchors smooth-scroll, scroll-margin-top set, mobile menu collapses, no overflow in vi/en).
+Flag any drift into generic/templated layout. Design gate — no code review.
 ```
 
 ---
@@ -287,46 +341,66 @@ in dishes.ts. Flag any image that visibly misrepresents its dish.
 
 ---
 
-## PHASE 4 — Skeleton build (implement chosen layout)
+## PHASE 4 — Skeleton build (implement Variant D blueprint)
 
-**Mục tiêu:** code thật các section theo direction đã chọn, data-driven, gắn ảnh + lang toggle. Structure trước, polish để dành Phase 6.
+**Mục tiêu:** port **Variant D** (`app/preview/d/page.tsx`) thành component thật, data-driven, gắn ảnh + lang toggle + header nav. Structure trước, polish để dành Phase 6. Xong thì **xóa sạch `app/preview/`**.
+
+> Blueprint = Variant D (xem decision record cuối Phase 2). D = base B + craft map của C + header nav. Phase 4 phải giữ nguyên 3 thứ đó.
 
 **Prompt (Claude Code):**
 
 ```
-Project context: implement the Phase 2 chosen layout as real components for the Quảng Trị
-bilingual single-page site. Data is in /content (dishes, gifts, copy); language via useLang
-(?lang=, default vi). next/font (Playfair Display + Be Vietnam Pro, vietnamese subset) is already
-wired in the root layout from Phase 1 — reuse it, don't re-declare. Build structure &
-responsiveness; leave fine visual polish for the taste-skill pass later.
+Read .agents/skills/design-taste-frontend/SKILL.md and follow it. The chosen blueprint is
+app/preview/d/page.tsx (Variant D). Implement it as the real production single page at
+app/page.tsx — then DELETE the entire app/preview/ folder so no throwaway routes ship to Vercel.
 
-First, port the chosen Phase 2 preview (app/preview/<x>/page.tsx) into proper data-driven
-components — then DELETE the entire app/preview/ folder so no throwaway routes ship to Vercel.
+Read app/preview/d/page.tsx first and preserve all of its design decisions:
+- Base = Variant B: large emotive imagery, immersive hero, photography-led storytelling, B's
+  type/spacing treatment.
+- Craft Map = Variant C's treatment (structured magazine-grid styling of the map block).
+- Header nav (D's addition): menu links to Hero/Home, Featured, Dishes, Gifts, Craft Map that
+  smooth-scroll to stable section anchors; language toggle lives in the header; scroll-margin-top
+  on sections so headings aren't hidden under the sticky header; mobile menu collapses (hamburger).
+
+Project context: bilingual (VI/EN) single-page landing for the regional food specialties of
+Quảng Trị. Data is in /content (dishes, gifts, copy); language via useLang (?lang=, default vi).
+next/font (Playfair Display + Be Vietnam Pro, vietnamese subset) is already wired in the root
+layout from Phase 1 — reuse it, don't re-declare. This is the STRUCTURAL pass: keep D's look,
+make it clean and data-driven; leave fine visual polish for the taste-skill pass later.
 
 Build these components, all reading text as field[lang]:
+- Header — nav links (smooth-scroll anchors) + LangToggle + mobile collapsed menu
 - LangToggle — switches vi/en via useLang
-- Hero — copy.hero + toggle + hero image
-- FeaturedDish — bún hến Mai Xá, emphasized per chosen direction
+- Hero — copy.hero + hero image (immersive, per B)
+- FeaturedDish — bún hến Mai Xá, emphasized per D
 - DishGrid — maps over dishes, next/image with fixed aspect-ratio, village + name + desc + tag
 - GiftSection — maps over gifts
-- CraftMap — placeholder block for now (SVG comes in Phase 5)
+- CraftMap — styled placeholder block for now, using C's treatment (real SVG comes in Phase 5)
 - Footer — copy.footer
 
 Requirements:
-- Test BOTH languages: EN strings are often longer — no overflow/broken headings on mobile.
+- All copy from /content; no hardcoded Vietnamese strings. Add any missing nav/section labels
+  to copy.ts (bilingual).
+- Each section has a stable id; header links smooth-scroll to them; scroll-margin-top intact.
+- Test BOTH languages: EN is usually longer — no overflow/broken headings, especially in the
+  header nav and on mobile.
 - No layout shift on language switch.
 - Semantic HTML, alt text from dish names, no <form> tags.
 - Minimal Tailwind for structure only; do not over-style — taste-skill refines later.
-- app/preview/ must be gone after this phase.
+- app/preview/ must be fully removed after this phase.
+
+Briefly summarize the component structure and confirm app/preview/ is deleted.
 ```
 
 **QA gate:**
 
 ```
-/qa — scope: build passes; app/preview/ is deleted (no leftover preview routes); both vi and en
-render with no overflow/CLS on mobile + desktop; images use fixed aspect-ratio; lang toggle
-updates content AND document.documentElement.lang; Vietnamese diacritics render correctly
-(font subset working); a11y alt text present.
+/qa — scope: build passes; app/preview/ is deleted (no leftover preview routes); real page renders
+at app/page.tsx; header nav links smooth-scroll to the correct sections with scroll-margin-top
+intact; mobile menu collapses with no horizontal overflow; both vi and en render with no
+overflow/CLS on mobile + desktop; images use fixed aspect-ratio; lang toggle (in header) updates
+content AND document.documentElement.lang; Vietnamese diacritics render correctly; a11y alt text
+present.
 ```
 
 ---
