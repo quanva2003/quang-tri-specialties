@@ -25,6 +25,7 @@ export function GiftSection({ lang, gifts }: { lang: Lang; gifts: Gift[] }) {
                 alt={t(lang, gift.name)}
                 seed={gift.id}
                 frameClassName="aspect-[4/5] w-full"
+                sizes="min(320px, 80vw)"
               />
               <div className="pt-4">
                 <h3 className="font-heading text-lg leading-snug" style={{ color: CREAM }}>

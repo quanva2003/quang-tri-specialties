@@ -27,6 +27,7 @@ export function DishGrid({ lang, dishes }: { lang: Lang; dishes: Dish[] }) {
                   seed={dish.id}
                   frameClassName={big ? "aspect-square w-full" : "aspect-[4/3] w-full"}
                   imgClassName="transition-transform duration-500 group-hover:scale-105"
+                  sizes={big ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 50vw, 25vw"}
                 />
                 <div
                   className="absolute inset-0"

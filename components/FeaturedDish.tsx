@@ -15,6 +15,7 @@ export function FeaturedDish({ lang, dish }: { lang: Lang; dish: Dish }) {
           seed={dish.id}
           frameClassName="h-[60vh] w-full md:h-[90vh]"
           imgClassName="transition-transform duration-700 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 60vw"
         />
       </div>
       <div

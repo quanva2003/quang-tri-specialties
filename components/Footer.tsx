@@ -5,10 +5,15 @@ import { copy } from "@/content/copy";
 export function Footer({ lang }: { lang: Lang }) {
   return (
     <footer className="px-6 py-10 md:px-12" style={{ borderTop: `1px solid ${RULE}` }}>
-      <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-2 md:flex-row md:items-center">
-        <span className="font-heading text-base">Quảng Trị</span>
-        <p className="text-sm" style={{ color: BROWN }}>
-          {t(lang, copy.footer.text)}
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-2">
+        <div className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center">
+          <span className="font-heading text-base">Quảng Trị</span>
+          <p className="text-sm" style={{ color: BROWN }}>
+            {t(lang, copy.footer.text)}
+          </p>
+        </div>
+        <p className="text-xs" style={{ color: BROWN }}>
+          © 2026 QuanVA — {t(lang, copy.footer.credit)}
         </p>
       </div>
     </footer>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const PLACEHOLDER_TONES = ["#6B4F33", "#5C6B4E", "#C9B591", "#8C6A45", "#7A8566"];
 
@@ -22,6 +23,7 @@ export function PhotoFrame({
   frameClassName = "",
   imgClassName = "",
   eager = false,
+  sizes = "100vw",
 }: {
   src: string;
   alt: string;
@@ -29,6 +31,7 @@ export function PhotoFrame({
   frameClassName?: string;
   imgClassName?: string;
   eager?: boolean;
+  sizes?: string;
 }) {
   const [failed, setFailed] = useState(false);
   const tone = placeholderTone(seed);
@@ -43,12 +46,14 @@ export function PhotoFrame({
       style={{ background: `linear-gradient(135deg, ${tone}66, ${tone}22)` }}
     >
       {!failed && (
-        <img
+        <Image
           src={src}
           alt={alt}
+          fill
+          sizes={sizes}
           onError={() => setFailed(true)}
-          className={`absolute inset-0 h-full w-full object-cover ${imgClassName}`}
-          loading={eager ? "eager" : "lazy"}
+          className={`object-cover ${imgClassName}`}
+          {...(eager ? { priority: true } : { loading: "lazy" as const })}
         />
       )}
     </div>

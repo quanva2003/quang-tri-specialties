@@ -39,5 +39,9 @@ export const copy = {
       vi: "Thực hiện với tình yêu dành cho Quảng Trị.",
       en: "Made with love for Quảng Trị.",
     } as Bilingual,
+    credit: {
+      vi: "Thực hiện bởi QuanVA",
+      en: "Built by QuanVA",
+    } as Bilingual,
   },
 };
