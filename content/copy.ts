@@ -25,8 +25,12 @@ export const copy = {
     gifts: { vi: "Đặc sản làm quà", en: "Gifts to bring home" } as Bilingual,
     craftMap: { vi: "Bản đồ làng nghề", en: "Craft map" } as Bilingual,
     craftMapNote: {
-      vi: "Minh hoạ, sẽ thay bằng bản đồ làng nghề chi tiết.",
-      en: "Illustrative placeholder, to be replaced with a detailed craft map.",
+      vi: "Minh hoạ phong cách, không theo tỷ lệ địa lý.",
+      en: "Stylized illustration, not to geographic scale.",
+    } as Bilingual,
+    craftMapHint: {
+      vi: "Chạm hoặc trỏ vào một làng để xem món ăn đặc trưng.",
+      en: "Hover or tap a village to see its signature dishes.",
     } as Bilingual,
     villages: { vi: "Làng nghề", en: "Villages" } as Bilingual,
   },

@@ -1,20 +1,33 @@
-import type { Lang } from "@/lib/useLang";
-import { t, BROWN, MOSS, CHILI, INK, RULE } from "@/lib/theme";
-import { copy } from "@/content/copy";
+"use client";
 
-const villages: { name: string; x: number; y: number }[] = [
-  { name: "Vĩnh Linh", x: 150, y: 60 },
-  { name: "Hồ Xá", x: 210, y: 110 },
-  { name: "Cam Lộ", x: 130, y: 190 },
-  { name: "Đông Hà", x: 220, y: 230 },
-  { name: "Mai Xá", x: 270, y: 250 },
-  { name: "Chợ Sãi", x: 180, y: 300 },
-  { name: "Mỹ Chánh", x: 230, y: 340 },
-  { name: "Phương Lang", x: 150, y: 380 },
-  { name: "Hải Lăng", x: 190, y: 430 },
-  { name: "Hướng Hóa", x: 90, y: 470 },
-  { name: "Khe Sanh", x: 70, y: 510 },
+import { useState } from "react";
+import type { Lang } from "@/lib/useLang";
+import { t, BROWN, MOSS, CHILI, INK, SAND, RULE } from "@/lib/theme";
+import { copy } from "@/content/copy";
+import { dishes } from "@/content/dishes";
+
+type Village = { id: string; name: string; x: number; y: number; matches: string[] };
+
+const villages: Village[] = [
+  { id: "mai-xa", name: "Mai Xá", x: 250, y: 90, matches: ["Mai Xá"] },
+  { id: "dong-ha", name: "Đông Hà", x: 220, y: 200, matches: ["Đông Hà"] },
+  { id: "cho-sai", name: "Chợ Sãi", x: 250, y: 250, matches: ["Chợ Sãi"] },
+  { id: "huong-hoa", name: "Hướng Hóa (Khe Sanh)", x: 35, y: 352, matches: ["Hướng Hóa"] },
+  { id: "my-chanh", name: "Mỹ Chánh", x: 230, y: 320, matches: ["Mỹ Chánh"] },
+  { id: "phuong-lang", name: "Phương Lang", x: 210, y: 370, matches: ["Phương Lang"] },
+  { id: "bau-tram", name: "Bàu Tràm", x: 185, y: 410, matches: ["Bàu Tràm"] },
+  { id: "hai-lang", name: "Hải Lăng", x: 205, y: 460, matches: ["Hải Lăng"] },
 ];
+
+// Stylized silhouette: narrow coastal strip in the north/south, bulging west
+// at mid-latitude for the Hướng Hóa highlands that reach toward the Laos border.
+const PROVINCE_OUTLINE =
+  "M 240 30 L 265 50 L 280 80 L 270 105 L 285 125 L 295 155 L 280 185 " +
+  "L 300 210 L 290 240 L 275 270 L 280 300 L 260 330 L 265 360 L 245 390 " +
+  "L 250 420 L 225 450 L 230 480 L 200 510 L 170 495 L 150 470 L 135 440 " +
+  "L 140 410 L 120 390 L 90 380 L 55 370 L 20 360 L 50 335 L 75 320 L 95 300 " +
+  "L 80 270 L 60 240 L 75 210 L 60 180 L 80 150 L 70 120 L 95 95 L 120 70 " +
+  "L 150 50 L 185 35 Z";
 
 function SectionHead({ title }: { title: string }) {
   return (
@@ -25,6 +38,10 @@ function SectionHead({ title }: { title: string }) {
 }
 
 export function CraftMap({ lang }: { lang: Lang }) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const active = villages.find((v) => v.id === activeId) ?? null;
+  const activeDishes = active ? dishes.filter((d) => active.matches.includes(d.village)) : [];
+
   return (
     <section id="map" className="mx-auto max-w-[1400px] scroll-mt-24 px-6 py-16 md:px-12 md:py-24">
       <SectionHead title={t(lang, copy.sections.craftMap)} />
@@ -32,35 +49,79 @@ export function CraftMap({ lang }: { lang: Lang }) {
         {t(lang, copy.sections.craftMapNote)}
       </p>
       <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-12">
-        <div className="flex justify-center md:col-span-7">
-          <svg viewBox="0 0 400 600" className="h-[440px] w-full max-w-sm" aria-hidden="true">
-            <path
-              d="M150 60 C 200 90, 200 130, 210 110 C 220 150, 110 170, 130 190 C 150 210, 240 210, 220 230 C 200 250, 290 240, 270 250 C 250 260, 160 280, 180 300 C 200 320, 250 320, 230 340 C 210 360, 130 360, 150 380 C 170 400, 210 410, 190 430 C 170 450, 100 450, 90 470 C 80 490, 80 490, 70 510"
-              fill="none"
-              stroke={BROWN}
-              strokeWidth="2"
-              strokeLinecap="round"
-              opacity="0.5"
-            />
-            {villages.map((v) => (
-              <g key={v.name}>
-                <circle cx={v.x} cy={v.y} r="5" fill={CHILI} />
-                <text x={v.x + 12} y={v.y + 4} className="font-heading" fontSize="13" fill={INK}>
-                  {v.name}
-                </text>
-              </g>
-            ))}
+        <div className="md:col-span-7">
+          <svg
+            viewBox="0 0 400 600"
+            className="h-[440px] w-full max-w-sm md:mx-auto"
+            role="img"
+            aria-label={t(lang, copy.sections.craftMap)}
+          >
+            <path d={PROVINCE_OUTLINE} fill={`${BROWN}14`} stroke={BROWN} strokeWidth="2" strokeLinecap="round" />
+            {villages.map((v) => {
+              const isActive = v.id === activeId;
+              return (
+                <g
+                  key={v.id}
+                  onMouseEnter={() => setActiveId(v.id)}
+                  onMouseLeave={() => setActiveId((cur) => (cur === v.id ? null : cur))}
+                  onClick={() => setActiveId((cur) => (cur === v.id ? null : v.id))}
+                  className="cursor-pointer"
+                >
+                  <circle cx={v.x} cy={v.y} r={isActive ? 7 : 5} fill={isActive ? CHILI : MOSS} />
+                  <text
+                    x={v.x + 12}
+                    y={v.y + 4}
+                    className="font-heading"
+                    fontSize="13"
+                    fill={isActive ? CHILI : INK}
+                    fontWeight={isActive ? 600 : 400}
+                  >
+                    {v.name}
+                  </text>
+                </g>
+              );
+            })}
           </svg>
         </div>
         <div className="md:col-span-5 md:border-l md:pl-12" style={{ borderColor: RULE }}>
           <span className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: MOSS }}>
             {t(lang, copy.sections.villages)}
           </span>
-          <ul className="mt-4 grid grid-cols-2 gap-y-2 text-sm" style={{ color: BROWN }}>
+          <ul className="mt-4 grid grid-cols-2 gap-y-2 text-sm">
             {villages.map((v) => (
-              <li key={v.name}>{v.name}</li>
+              <li key={v.id}>
+                <button
+                  type="button"
+                  onMouseEnter={() => setActiveId(v.id)}
+                  onMouseLeave={() => setActiveId((cur) => (cur === v.id ? null : cur))}
+                  onClick={() => setActiveId((cur) => (cur === v.id ? null : v.id))}
+                  className="text-left transition-colors"
+                  style={{ color: v.id === activeId ? CHILI : BROWN }}
+                >
+                  {v.name}
+                </button>
+              </li>
             ))}
           </ul>
+
+          <div className="mt-6 min-h-[88px] rounded-xl p-4" style={{ backgroundColor: `${SAND}`, border: `1px solid ${RULE}` }}>
+            {active ? (
+              <>
+                <p className="font-heading text-sm" style={{ color: CHILI }}>
+                  {active.name}
+                </p>
+                <ul className="mt-2 space-y-1 text-sm" style={{ color: INK }}>
+                  {activeDishes.map((d) => (
+                    <li key={d.id}>{t(lang, d.name)}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="text-sm" style={{ color: BROWN }}>
+                {t(lang, copy.sections.craftMapHint)}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </section>
