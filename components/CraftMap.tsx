@@ -38,7 +38,12 @@ function SectionHead({ title }: { title: string }) {
 }
 
 export function CraftMap({ lang }: { lang: Lang }) {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  // Hover previews a village; click pins it so the detail panel stays put
+  // once the cursor moves away. Kept as separate state so a click's toggle
+  // never fights the mouseenter that necessarily fires right before it.
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [pinnedId, setPinnedId] = useState<string | null>(null);
+  const activeId = pinnedId ?? hoveredId;
   const active = villages.find((v) => v.id === activeId) ?? null;
   const activeDishes = active ? dishes.filter((d) => active.matches.includes(d.village)) : [];
 
@@ -62,9 +67,9 @@ export function CraftMap({ lang }: { lang: Lang }) {
               return (
                 <g
                   key={v.id}
-                  onMouseEnter={() => setActiveId(v.id)}
-                  onMouseLeave={() => setActiveId((cur) => (cur === v.id ? null : cur))}
-                  onClick={() => setActiveId((cur) => (cur === v.id ? null : v.id))}
+                  onMouseEnter={() => setHoveredId(v.id)}
+                  onMouseLeave={() => setHoveredId((cur) => (cur === v.id ? null : cur))}
+                  onClick={() => setPinnedId((cur) => (cur === v.id ? null : v.id))}
                   className="cursor-pointer"
                 >
                   <circle
@@ -98,9 +103,9 @@ export function CraftMap({ lang }: { lang: Lang }) {
               <li key={v.id}>
                 <button
                   type="button"
-                  onMouseEnter={() => setActiveId(v.id)}
-                  onMouseLeave={() => setActiveId((cur) => (cur === v.id ? null : cur))}
-                  onClick={() => setActiveId((cur) => (cur === v.id ? null : v.id))}
+                  onMouseEnter={() => setHoveredId(v.id)}
+                  onMouseLeave={() => setHoveredId((cur) => (cur === v.id ? null : cur))}
+                  onClick={() => setPinnedId((cur) => (cur === v.id ? null : v.id))}
                   className="text-left transition-colors"
                   style={{ color: v.id === activeId ? CHILI : BROWN }}
                 >
