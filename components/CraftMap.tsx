@@ -32,7 +32,7 @@ const PROVINCE_OUTLINE =
 function SectionHead({ title }: { title: string }) {
   return (
     <div className="border-t pt-5" style={{ borderColor: RULE }}>
-      <h2 className="font-heading mt-2 text-3xl leading-tight md:text-4xl">{title}</h2>
+      <h2 className="font-heading mt-2 text-3xl leading-tight tracking-tight md:text-4xl">{title}</h2>
     </div>
   );
 }
@@ -43,7 +43,7 @@ export function CraftMap({ lang }: { lang: Lang }) {
   const activeDishes = active ? dishes.filter((d) => active.matches.includes(d.village)) : [];
 
   return (
-    <section id="map" className="mx-auto max-w-[1400px] scroll-mt-24 px-6 py-16 md:px-12 md:py-24">
+    <section id="map" className="mx-auto max-w-[1400px] scroll-mt-24 px-6 py-20 md:px-12 md:py-28">
       <SectionHead title={t(lang, copy.sections.craftMap)} />
       <p className="mt-4 max-w-md text-sm" style={{ color: BROWN }}>
         {t(lang, copy.sections.craftMapNote)}
@@ -67,11 +67,17 @@ export function CraftMap({ lang }: { lang: Lang }) {
                   onClick={() => setActiveId((cur) => (cur === v.id ? null : v.id))}
                   className="cursor-pointer"
                 >
-                  <circle cx={v.x} cy={v.y} r={isActive ? 7 : 5} fill={isActive ? CHILI : MOSS} />
+                  <circle
+                    cx={v.x}
+                    cy={v.y}
+                    r={isActive ? 7 : 5}
+                    fill={isActive ? CHILI : MOSS}
+                    className="transition-all duration-200"
+                  />
                   <text
                     x={v.x + 12}
                     y={v.y + 4}
-                    className="font-heading"
+                    className="font-heading transition-colors duration-200"
                     fontSize="13"
                     fill={isActive ? CHILI : INK}
                     fontWeight={isActive ? 600 : 400}

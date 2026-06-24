@@ -1,5 +1,5 @@
 import type { Lang } from "@/lib/useLang";
-import { t, INK } from "@/lib/theme";
+import { t, INK, MOSS, CREAM, CREAM_DIM, GOLD_DIM } from "@/lib/theme";
 import { copy } from "@/content/copy";
 import type { Dish } from "@/content/dishes";
 import { PhotoFrame } from "./PhotoFrame";
@@ -8,12 +8,13 @@ import { Reveal } from "./Reveal";
 export function FeaturedDish({ lang, dish }: { lang: Lang; dish: Dish }) {
   return (
     <section id="featured" className="grid scroll-mt-24 grid-cols-1 md:grid-cols-12">
-      <div className="md:col-span-7">
+      <div className="group md:col-span-7">
         <PhotoFrame
           src={dish.image}
           alt={t(lang, dish.name)}
           seed={dish.id}
           frameClassName="h-[60vh] w-full md:h-[90vh]"
+          imgClassName="transition-transform duration-700 group-hover:scale-105"
         />
       </div>
       <div
@@ -21,21 +22,21 @@ export function FeaturedDish({ lang, dish }: { lang: Lang; dish: Dish }) {
         style={{ backgroundColor: INK }}
       >
         <Reveal>
-          <span className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: "#C9B591" }}>
+          <span className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: GOLD_DIM }}>
             {t(lang, copy.sections.featured)}
           </span>
-          <h2 className="font-heading mt-4 text-3xl leading-tight text-[#F1E8D6] md:text-5xl">
+          <h2 className="font-heading mt-4 text-3xl leading-tight tracking-tight md:text-5xl" style={{ color: CREAM }}>
             {t(lang, dish.name)}
           </h2>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-[#E7D9BC] md:text-lg">
+          <p className="mt-6 max-w-md text-base leading-relaxed md:text-lg" style={{ color: CREAM_DIM }}>
             {t(lang, dish.desc)}
           </p>
           <div className="mt-7 flex flex-wrap items-center gap-3">
-            <span className="rounded-full px-3 py-1 text-xs font-medium text-white" style={{ backgroundColor: "#5C6B4E" }}>
+            <span className="rounded-full px-3 py-1 text-xs font-medium text-white" style={{ backgroundColor: MOSS }}>
               {dish.village}
             </span>
             {dish.tag && (
-              <span className="text-xs" style={{ color: "#C9B591" }}>
+              <span className="text-xs" style={{ color: GOLD_DIM }}>
                 {t(lang, dish.tag)}
               </span>
             )}

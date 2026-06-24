@@ -30,7 +30,15 @@ function useReveal<T extends HTMLElement>() {
   return { ref, shown };
 }
 
-export function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+export function Reveal({
+  children,
+  className = "",
+  delayMs = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delayMs?: number;
+}) {
   const { ref, shown } = useReveal<HTMLDivElement>();
   return (
     <div
@@ -38,6 +46,7 @@ export function Reveal({ children, className = "" }: { children: React.ReactNode
       className={`${className} transition-[opacity,transform] duration-700 ease-out ${
         shown ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       }`}
+      style={{ transitionDelay: shown ? `${delayMs}ms` : "0ms" }}
     >
       {children}
     </div>
