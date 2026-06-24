@@ -24,6 +24,11 @@ export const copy = {
     dishes: { vi: "Món ngon Quảng Trị", en: "Dishes of Quảng Trị" } as Bilingual,
     gifts: { vi: "Đặc sản làm quà", en: "Gifts to bring home" } as Bilingual,
     craftMap: { vi: "Bản đồ làng nghề", en: "Craft map" } as Bilingual,
+    craftMapNote: {
+      vi: "Minh hoạ, sẽ thay bằng bản đồ làng nghề chi tiết.",
+      en: "Illustrative placeholder, to be replaced with a detailed craft map.",
+    } as Bilingual,
+    villages: { vi: "Làng nghề", en: "Villages" } as Bilingual,
   },
   footer: {
     text: {
