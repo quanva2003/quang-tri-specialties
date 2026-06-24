@@ -9,6 +9,7 @@ export const copy = {
     map: { vi: "Bản đồ làng nghề", en: "Craft map" } as Bilingual,
   },
   hero: {
+    image: "/hero/quang-tri-hero.jpg",
     headline: {
       vi: "Hương vị quê nhà, theo bước người Quảng Trị xa quê",
       en: "The taste of home, carried by every Quảng Trị soul far away",

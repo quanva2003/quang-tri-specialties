@@ -1,12 +1,16 @@
 import { Bilingual } from "./types";
 
 export type Gift = {
+  id: string;
+  image: string;
   name: Bilingual;
   desc: Bilingual;
 };
 
 export const gifts: Gift[] = [
   {
+    id: "ca-phe-khe-sanh",
+    image: "/gifts/ca-phe-khe-sanh.jpg",
     name: { vi: "Cà phê Khe Sanh", en: "Khe Sanh coffee" },
     desc: {
       vi: "Trồng ở độ cao 1.000–1.500m trên đất bazan đỏ, hương vị đậm đà đặc trưng vùng cao.",
@@ -14,6 +18,8 @@ export const gifts: Gift[] = [
     },
   },
   {
+    id: "cao-che-vang-cam-lo",
+    image: "/gifts/cao-che-vang-cam-lo.jpg",
     name: { vi: "Cao chè vằng Cam Lộ", en: "Cam Lộ chè vằng extract" },
     desc: {
       vi: "Cao thảo dược cô đặc từ lá chè vằng, bài thuốc dân gian quen thuộc của người Quảng Trị.",
@@ -21,6 +27,8 @@ export const gifts: Gift[] = [
     },
   },
   {
+    id: "ruou-kim-long",
+    image: "/gifts/ruou-kim-long.jpg",
     name: { vi: "Rượu Kim Long", en: "Kim Long rice wine" },
     desc: {
       vi: "Rượu gạo nấu theo bí quyết truyền thống của làng Kim Long, nồng mà êm.",
@@ -28,6 +36,8 @@ export const gifts: Gift[] = [
     },
   },
   {
+    id: "ho-tieu-vinh-linh",
+    image: "/gifts/ho-tieu-vinh-linh.jpg",
     name: { vi: "Hồ tiêu Vĩnh Linh", en: "Vĩnh Linh pepper" },
     desc: {
       vi: "Tiêu Vĩnh Linh nổi tiếng với hạt tiêu đỏ thơm cay, được giới sành tiêu ưa chuộng.",
@@ -35,6 +45,8 @@ export const gifts: Gift[] = [
     },
   },
   {
+    id: "ot-dam-cau-nhi",
+    image: "/gifts/ot-dam-cau-nhi.jpg",
     name: { vi: "Ớt dầm Câu Nhi", en: "Câu Nhi pickled chili" },
     desc: {
       vi: "Ớt dầm theo công thức riêng của làng Câu Nhi, cay nồng và đậm đà.",
