@@ -24,7 +24,7 @@ export function Hero({ lang }: { lang: Lang }) {
       />
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-16 md:px-12 md:pb-20">
         <h1
-          className="animate-fade-up font-heading max-w-2xl text-4xl leading-[1.1] tracking-tight md:text-6xl"
+          className="animate-fade-up font-heading max-w-3xl text-4xl leading-[1.1] tracking-tight md:text-5xl lg:text-6xl"
           style={{ color: CREAM }}
         >
           {t(lang, copy.hero.headline)}
